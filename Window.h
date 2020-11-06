@@ -24,6 +24,8 @@ public:
     static PointCloud * bearPoints;
     static PointCloud * bunnyPoints;
     static PointCloud * sandalPoints;
+    static PointCloud * lightSource;
+    static glm::vec3 lastpoint;
 
 	// Camera Matrices
 	static glm::mat4 projection;
@@ -48,6 +50,10 @@ public:
 
 	// Callbacks
 	static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+    static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+    static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
+    static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+    static glm::vec3 rotate(double x, double y);
 };
 
 #endif

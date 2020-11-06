@@ -1,10 +1,12 @@
 #include "Window.h"
 
-
 // Window Properties
 int Window::width;
 int Window::height;
 const char* Window::windowTitle = "GLFW Starter Project";
+const double m_ROTSCALE = 90.0;
+bool but = false;
+int sOr = 1;
 
 // Objects to Render
 Cube * Window::cube;
@@ -16,6 +18,8 @@ PointCloud * currObj;
 PointCloud * Window::bearPoints;
 PointCloud * Window::bunnyPoints;
 PointCloud * Window::sandalPoints;
+PointCloud * Window::lightSource;
+glm::vec3 Window::lastpoint(0,0,0);
 
 // Camera Matrices 
 // Projection matrix:
@@ -54,11 +58,16 @@ bool Window::initializeObjects()
 	// Create a point cloud consisting of cube vertices.
 	//cubePoints = new PointCloud("foo", 100);
 
-    bearPoints = new PointCloud("bear.obj", 5);
-    bunnyPoints = new PointCloud("bunny.obj", 5);
-    sandalPoints = new PointCloud("SandalF20.obj", 5);
+    bearPoints = new PointCloud("bear.obj", 5, glm::vec3 (0,0,0
+                                                          ), glm::vec3 (0,0,0), glm::vec3 (100,100,100), 0.25, 1);
+    
+    bunnyPoints = new PointCloud("bunny.obj", 5, glm::vec3 (0.2,0.2,0.2), glm::vec3 (10,10,10), glm::vec3 (0,0,0), 0.25, 1);
+    
+    sandalPoints = new PointCloud("SandalF20.obj", 5, glm::vec3 (0.25,0.20725,0.20725), glm::vec3 (1,0.829,0.829), glm::vec3 (0.6,0.7,0.7), 0.088, 1);
+    
+    lightSource = new PointCloud("sphere.obj", 5, glm::vec3(1,0,1), glm::vec3(0,0,0), glm::vec3(0,0,0), 0.25, 0);
  
-	// Set cube to be the first to display
+	// Setcube to be the first to display
 	//currObj = cube;
     
     currObj = sandalPoints;
@@ -165,7 +174,8 @@ void Window::displayCallback(GLFWwindow* window)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	
 
 	// Render the objects
-	currObj->draw(view, projection, shaderProgram);
+    lightSource->draw(view, projection, shaderProgram, lightSource->model[3]);
+	currObj->draw(view, projection, shaderProgram, lightSource->model[3]);
 
 	// Gets events, including input such as keyboard and mouse or window resizing
 	glfwPollEvents();
@@ -192,18 +202,22 @@ void Window::keyCallback(GLFWwindow* window, int key, int scancode, int action, 
 
 		// switch between the cube and the cube pointCloud
 		case GLFW_KEY_1:
-			//currObj = cube;
-                currObj = sandalPoints;
-                currObj->updatePointSize(5);
+                sOr = 1;
 			break;
 		case GLFW_KEY_2:
-			//currObj = cubePoints;
-                currObj = bunnyPoints;
-                currObj->updatePointSize(5);
+                sOr = 2;
 			break;
         case GLFW_KEY_3:
+                sOr = 0;
+            break;
+        case GLFW_KEY_A:
+                currObj = sandalPoints;
+            break;
+        case GLFW_KEY_B:
+                currObj = bunnyPoints;
+            break;
+        case GLFW_KEY_C:
                 currObj = bearPoints;
-                currObj->updatePointSize(5);
             break;
         case GLFW_KEY_L:
                 currObj->updatePointSize(100);
@@ -211,9 +225,93 @@ void Window::keyCallback(GLFWwindow* window, int key, int scancode, int action, 
         case GLFW_KEY_S:
                 currObj->updatePointSize(1);
             break;
-
+        case GLFW_KEY_N:
+                currObj->switchIndicator();
 		default:
 			break;
 		}
 	}
+}
+
+void Window::mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+    if (button == GLFW_MOUSE_BUTTON_LEFT){
+        if(action == GLFW_PRESS) {
+            if(lastpoint == glm::vec3(0,0,0)){
+                double x, y;
+                glfwGetCursorPos(window, &x, &y);
+                lastpoint = rotate(x, y);
+            }
+            but = true;
+        }
+        if(action == GLFW_RELEASE){
+            but = false;
+        }
+    }
+}
+
+void Window::cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
+{
+    if(but == true){
+        glm::vec3 direction;
+        float rot_angle;
+        glm::vec3 curPoint;
+    
+        curPoint = rotate(xpos, ypos);
+        //direction = curPoint - lastpoint;
+        direction = lastpoint - curPoint;
+        float velocity = direction.length();
+        
+        if(velocity > 0.01){
+            glm::vec3 rotAxis;
+            rotAxis = glm::cross(curPoint, lastpoint);
+            //rotAxis = glm::cross(lastpoint, curPoint);
+            rot_angle = velocity * m_ROTSCALE;
+            if(sOr == 1){
+                currObj->model = glm::rotate(glm::mat4(1), rot_angle, rotAxis)*currObj->model;
+            }
+            else if (sOr == 2){
+                lightSource->rotateL(rot_angle, rotAxis);
+            }
+            else{
+                currObj->model = glm::rotate(glm::mat4(1), rot_angle, rotAxis)*currObj->model;
+                lightSource->rotateL(rot_angle, rotAxis);
+            }
+        }
+        lastpoint = curPoint;
+    }
+}
+
+void Window::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+    if(sOr == 1){
+        yoffset = 1 + yoffset;
+        currObj->scale(yoffset);
+    }
+    else if(sOr == 2){
+        yoffset = 1 + yoffset;
+        lightSource->scale(yoffset);
+    }
+    else{
+        yoffset = 1 + yoffset;
+        currObj->scale(yoffset);
+        lightSource->scale(yoffset);
+        
+    }
+    
+    
+}
+
+glm::vec3 Window::rotate(double x, double y)
+{
+    glm::vec3 v;
+    float d;
+    v.x = (2.0*x- width) / width;
+    v.y = (height - 2.0*y) / height;
+    v.z = 0.0;
+    d = glm::length(v);
+    d = (d<1.0) ? d : 1.0;
+    v.z = sqrtf(1.001 - d*d);
+    glm::normalize(v);
+    return v;
 }
