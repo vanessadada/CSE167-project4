@@ -92,12 +92,12 @@ bool Window::initializeObjects()
  
 	// Setcube to be the first to display
 	//currObj = cube;
-    skybox = new skyBox("shaders/right.jpg", "shaders/left.jpg", "shaders/top.jpg", "shaders/bottom.jpg", "shaders/front.jpg", "shaders/back.jpg");
+    skybox = new skyBox("right.jpg", "left.jpg", "top.jpg", "bottom.jpg", "front.jpg", "back.jpg");
     sphere = new Sphere();
     cube = new Cube(16);
     
     cone = new Transform(glm::mat4(1));
-    coneModel = new Geometry("shaders/cone.obj", glm::vec3(1,0,0), glm::vec3(0,-10,-10), glm::vec3(1),1, 0);
+    coneModel = new Geometry("cone.obj", glm::vec3(1,0,0), glm::vec3(0,-10,-10), glm::vec3(1),1, 0);
     coneModel->setView(view);
     coneModel->setShader(modelShader);
     coneModel->setProjection(projection);
@@ -106,7 +106,7 @@ bool Window::initializeObjects()
     
     cylinder1 = new Transform(glm::mat4(1));
     //color position size isCylinder degree
-    cy1model = new Geometry("shaders/torus_lr.obj", glm::vec3(0,1,0), glm::vec3(0, -10, -10), glm::vec3(0.75),0, 0);
+    cy1model = new Geometry("torus_lr.obj", glm::vec3(0,1,0), glm::vec3(0, -10, -10), glm::vec3(0.75),0, 0);
     cy1model->setView(view);
     cy1model->setShader(modelShader);
     cy1model->setProjection(projection);
@@ -115,7 +115,7 @@ bool Window::initializeObjects()
     
     
     teapot1 = new Transform(glm::mat4(1));
-    te1model = new Geometry("shaders/teapot.obj", glm::vec3(0,0,1), glm::vec3(-24,-40,-40), glm::vec3(0.15),0, 0);
+    te1model = new Geometry("teapot.obj", glm::vec3(0,0,1), glm::vec3(-24,-40,-40), glm::vec3(0.15),0, 0);
     te1model->setView(view);
     te1model->setShader(modelShader);
     te1model->setProjection(projection);
