@@ -8,13 +8,13 @@
 
 
 PointCloud::PointCloud(std::string objFilename, GLfloat pointSize, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float shininess, int type)
-	: pointSize(pointSize), ambient(ambient), diffuse(diffuse), specular(specular), shininess(shininess), type(type)
+    : pointSize(pointSize), ambient(ambient), diffuse(diffuse), specular(specular), shininess(shininess), type(type)
 {
-	/* 
-	 * TODO: Section 2: Currently, all the points are hard coded below. 
-	 * Modify this to read points from an obj file.
-	 */
-	std::ifstream objFile(objFilename); // The obj file we are reading.
+    /*
+     * TODO: Section 2: Currently, all the points are hard coded below.
+     * Modify this to read points from an obj file.
+     */
+    std::ifstream objFile(objFilename); // The obj file we are reading.
     
     // Check whether the file can be opened.
     if (objFile.is_open())
@@ -79,10 +79,10 @@ PointCloud::PointCloud(std::string objFilename, GLfloat pointSize, glm::vec3 amb
     objFile.close();
     
 
-	/*
-	 * TODO: Section 4, you will need to normalize the object to fit in the
-	 * screen. 
-	 */
+    /*
+     * TODO: Section 4, you will need to normalize the object to fit in the
+     * screen.
+     */
     
     if (type == 1){
         std::vector<float> xarray;
@@ -144,42 +144,41 @@ PointCloud::PointCloud(std::string objFilename, GLfloat pointSize, glm::vec3 amb
         // Set the model matrix to an identity matrix.
         model = glm::mat4(1);
         color = glm::vec3(220, 220, 220);
-        lightPos = glm::vec3(6,6,6);
     }
     else{
-        lightPos = glm::vec3(6,6,6);
         model = glm::mat4(1);
         model = glm::translate(glm::mat4(1), lightPos)*model;
         model = glm::scale(model, glm::vec3(0.25));
     }
 
-	// Set the color.
+    // Set the color.
+    /*
     lightcolor = glm::vec3(1, 0, 1);
     viewPos = glm::vec3(0, 0, 20);
     ambientlight = diffuselight * glm::vec3(0.2);
     diffuselight = lightcolor * glm::vec3(0.5);
-    specularlight = glm::vec3(1.0,1.0,1.0);
+    specularlight = glm::vec3(1.0,1.0,1.0);*/
     
-	// Generate a Vertex Array (VAO) and Vertex Buffer Object (VBO)
-	glGenVertexArrays(1, &VAO);
+    // Generate a Vertex Array (VAO) and Vertex Buffer Object (VBO)
+    glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &nVBO);
     
-	glGenBuffers(1, &VBO);
+    glGenBuffers(1, &VBO);
     glGenBuffers(1, &EBO);
     
-	// Bind VAO
-	glBindVertexArray(VAO);
+    // Bind VAO
+    glBindVertexArray(VAO);
 
-	// Bind VBO to the bound VAO, and store the point data
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * points.size(), points.data(), GL_STATIC_DRAW);
+    // Bind VBO to the bound VAO, and store the point data
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * points.size(), points.data(), GL_STATIC_DRAW);
     
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
     
     glBindBuffer(GL_ARRAY_BUFFER, nVBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * normals.size(), normals.data(), GL_STATIC_DRAW);
-	// Enable Vertex Attribute 0 to pass point data through to the shader
+    // Enable Vertex Attribute 0 to pass point data through to the shader
 
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
@@ -194,16 +193,16 @@ PointCloud::PointCloud(std::string objFilename, GLfloat pointSize, glm::vec3 amb
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(glm::ivec3) * faces.size(), faces.data(), GL_STATIC_DRAW);
     
-	// Unbind the VBO/VAO
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
+    // Unbind the VBO/VAO
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
 }
 
-PointCloud::~PointCloud() 
+PointCloud::~PointCloud()
 {
-	// Delete the VBO and the VAO.
-	glDeleteBuffers(1, &VBO);
-	glDeleteVertexArrays(1, &VAO);
+    // Delete the VBO and the VAO.
+    glDeleteBuffers(1, &VBO);
+    glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &EBO);
 }
 
@@ -217,16 +216,16 @@ void PointCloud::rotateL (float angle, glm::vec3 axis){
         //lightPos = model[3];
     }
 
-void PointCloud::draw(const glm::mat4& view, const glm::mat4& projection, GLuint shader, glm::vec3 lightPos)
+void PointCloud::draw(const glm::mat4& view, const glm::mat4& projection, GLuint shader)
 {
-	// Actiavte the shader program 
-	glUseProgram(shader);
+    // Actiavte the shader program
+    glUseProgram(shader);
 
-	// Get the shader variable locations and send the uniform data to the shader 
-	glUniformMatrix4fv(glGetUniformLocation(shader, "view"), 1, false, glm::value_ptr(view));
-	glUniformMatrix4fv(glGetUniformLocation(shader, "projection"), 1, false, glm::value_ptr(projection));
-	glUniformMatrix4fv(glGetUniformLocation(shader, "model"), 1, GL_FALSE, glm::value_ptr(model));
-	glUniform3fv(glGetUniformLocation(shader, "color"), 1, glm::value_ptr(color));
+    // Get the shader variable locations and send the uniform data to the shader
+    glUniformMatrix4fv(glGetUniformLocation(shader, "view"), 1, false, glm::value_ptr(view));
+    glUniformMatrix4fv(glGetUniformLocation(shader, "projection"), 1, false, glm::value_ptr(projection));
+    glUniformMatrix4fv(glGetUniformLocation(shader, "model"), 1, GL_FALSE, glm::value_ptr(model));
+    glUniform3fv(glGetUniformLocation(shader, "color"), 1, glm::value_ptr(color));
     
     glUniform3fv(glGetUniformLocation(shader, "lightcolor"), 1, glm::value_ptr(lightcolor));
     
@@ -247,37 +246,31 @@ void PointCloud::draw(const glm::mat4& view, const glm::mat4& projection, GLuint
     glUniform1f(glGetUniformLocation(shader, "light.linear"), linear);
     
     glUniform3fv(glGetUniformLocation(shader, "light.position"), 1, glm::value_ptr(lightPos));
-    
-    glUniform3fv(glGetUniformLocation(shader, "light.ambient"), 1, glm::value_ptr(ambientlight));
-    
-    glUniform3fv(glGetUniformLocation(shader, "light.diffuse"), 1, glm::value_ptr(diffuselight));
-	
-    glUniform3fv(glGetUniformLocation(shader, "light.specular"), 1, glm::value_ptr(specularlight));
     // Bind the VAO
-	glBindVertexArray(VAO);
+    glBindVertexArray(VAO);
     //glBindVertexArray(lVAO);
 
-	// Set point size
-	glPointSize(pointSize);
+    // Set point size
+    glPointSize(pointSize);
     
     glDrawElements(GL_TRIANGLES, (3 * faces.size()), GL_UNSIGNED_INT, 0);
     
-	// Unbind the VAO and shader program
-	glBindVertexArray(0);
-	glUseProgram(0);
+    // Unbind the VAO and shader program
+    glBindVertexArray(0);
+    glUseProgram(0);
 }
 
 void PointCloud::update()
 {
-	// Spin the cube by 1 degree
-	spin(0.1f);
+    // Spin the cube by 1 degree
+    spin(0.1f);
 }
 
-void PointCloud::updatePointSize(GLfloat size) 
+void PointCloud::updatePointSize(GLfloat size)
 {
-	/*
-	 * TODO: Section 3: Implement this function to adjust the point size.
-	 */
+    /*
+     * TODO: Section 3: Implement this function to adjust the point size.
+     */
     
     pointSize = size;
 }
@@ -306,6 +299,6 @@ void PointCloud::scale(double x)
 
 void PointCloud::spin(float deg)
 {
-	// Update the model matrix by multiplying a rotation matrix
-	//model = model * glm::rotate(glm::radians(deg), glm::vec3(0.0f, 1.0f, 0.0f));
+    // Update the model matrix by multiplying a rotation matrix
+    //model = model * glm::rotate(glm::radians(deg), glm::vec3(0.0f, 1.0f, 0.0f));
 }

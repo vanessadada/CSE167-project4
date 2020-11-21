@@ -8,17 +8,17 @@
 class Cube : public Object
 {
 private:
-	GLuint VAO;
-	GLuint VBO, EBO;
+    GLuint VAO;
+    GLuint VBO, EBO;
 
 public:
-	Cube(float size);
-	~Cube();
+    Cube(float size);
+    ~Cube();
 
-	void draw(const glm::mat4& view, const glm::mat4& projection, GLuint shader);
-	void update();
+    void draw(const glm::mat4& view, const glm::mat4& projection, GLuint shader);
+    void update();
 
-	void spin(float deg);
+    void spin(float deg);
 };
 
 #endif

@@ -6,6 +6,12 @@
 #include "Object.h"
 #include "Cube.h"
 #include "PointCloud.h"
+#include "skyBox.hpp"
+#include "Sphere.h"
+#include "Transform.hpp"
+#include "Geometry.hpp"
+#include "Node.h"
+
 
 class Window
 {
@@ -21,19 +27,40 @@ public:
 	static PointCloud * cubePoints;
     
     
-    static PointCloud * bearPoints;
-    static PointCloud * bunnyPoints;
-    static PointCloud * sandalPoints;
-    static PointCloud * lightSource;
+    
+    static skyBox * skybox;
+    static Sphere * sphere;
+    static Transform * cone;
+    static Transform * cylinder1;
+    static Transform * cylinder2;
+    static Transform * cylinder3;
+    static Transform * cylinder4;
+    static Transform * cylinder5;
+    static Transform * cylinder6;
+    static Transform * teapot1;
+    static Transform * teapot2;
+    static Transform * teapot3;
+    static Transform * teapot4;
+    static Transform * teapot5;
+    static Transform * teapot6;
+    static Geometry * coneModel;
+    static Geometry * cy1model;
+    static Geometry * te1model;
+    static Geometry * te2model;
+    
+    
+    
     static glm::vec3 lastpoint;
 
 	// Camera Matrices
 	static glm::mat4 projection;
 	static glm::mat4 view;
-	static glm::vec3 eyePos, lookAtPoint, upVector;
+	static glm::vec3 eyePos, lookAtPoint, upVector, frontVector;
 
 	// Shader Program ID
 	static GLuint shaderProgram;
+    static GLuint sphereShader;
+    static GLuint modelShader;
 
 	// Constructors and Destructors
 	static bool initializeProgram();
