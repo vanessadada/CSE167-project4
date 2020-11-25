@@ -98,6 +98,8 @@ bool Window::initializeObjects()
     
     cone = new Transform(glm::mat4(1));
     coneModel = new Geometry("cone.obj", glm::vec3(1,0,0), glm::vec3(0,-10,-10), glm::vec3(1),1, 0);
+    cone->matrixM = cone->matrixM * glm::scale(glm::mat4(1), glm::vec3(0.75));
+    cone->matrixM = cone->matrixM * glm::translate(glm::mat4(1),glm::vec3(0,-12,-10));
     coneModel->setView(view);
     coneModel->setShader(modelShader);
     coneModel->setProjection(projection);
@@ -115,7 +117,9 @@ bool Window::initializeObjects()
     
     
     teapot1 = new Transform(glm::mat4(1));
-    te1model = new Geometry("teapot.obj", glm::vec3(0,0,1), glm::vec3(-24,-40,-40), glm::vec3(0.15),0, 0);
+    te1model = new Geometry("teapot.obj", glm::vec3(0,0,1), glm::vec3(-5,-10,-10), glm::vec3(0.15),0, 0);
+    teapot1->matrixM = teapot1->matrixM * glm::scale(glm::mat4(1), glm::vec3(0.25));
+    teapot1->matrixM = teapot1->matrixM * glm::translate(glm::mat4(1), glm::vec3(-17,8,-7));
     te1model->setView(view);
     te1model->setShader(modelShader);
     te1model->setProjection(projection);
@@ -224,9 +228,12 @@ void Window::idleCallback()
 	//skybox->update();
     sphere->update();
     
-    cone->update(0,0,isUpdown);
-    //cylinder1->update(0,0, isUpdown);
-    teapot1->update(isSpin,isAround, isUpdown);
+    cone->update(isSpin,0,isUpdown);
+    if (isAround == 1){
+        teapot1->spin(0.1);
+    }
+    //cylinder1->update(isSpin,isAround, isUpdown);
+    //teapot1->update(isSpin,isAround, isUpdown);
     //cy1model->update(1,0);
     //teapot2->update(1,1);
     //coneModel->update();

@@ -72,31 +72,6 @@ void Geometry::init(std::string filename)
                 {
                     std::string vertex1, vertex2, vertex3;
                     unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
-                    /*
-                    int i = 0;
-                    while(std::getline(ss, token, ' ')) {
-                        std::string x;
-                        std::string delimiter = "/";
-                        unsigned int first = token.find(delimiter);
-                        unsigned int last = token.find_last_of(delimiter);
-                        std::string v0 = token.substr(0, first);
-                        std::string u0 = token.substr(first+1, last);
-                        std::string n0 = token.substr(last+1, last+2);
-                        unsigned int indexv;
-                        sscanf(v0.c_str(), "%d", &indexv);
-                        unsigned int indexu;
-                        sscanf(u0.c_str(), "%d", &indexu);
-                        unsigned int indexn;
-                        sscanf(n0.c_str(), "%d", &indexn);
-                        
-                        vertexIndex[i] = indexv;
-                        uvIndex[i] = indexu;
-                        normalIndex[i] = indexn;
-                        
-                        i +=1;
-                    }
-                     */
-                    //std::cerr<<ss.str().c_str()<<std::endl;
                     std::string x;
                     sscanf(ss.str().c_str(), "%s %d/%d/%d %d/%d/%d %d/%d/%d\n", &x, &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
 
@@ -316,6 +291,16 @@ void Geometry::renderModel(glm::mat4 &view, glm::mat4 &projection, GLuint shader
 
 void Geometry::update(const int isRotate, const int isCenter, const int isUpdown)
 {
+    if(isUp == 1){
+        updown(glm::vec3(0,0.001,0));
+        counter = counter + 1;
+    }
+    else{
+        updown(glm::vec3(0,-0.001,0));
+        counter = counter - 1;
+    }
+    
+    /*
     //setMatrix(matrixC);
     if (isRotate == 1){
         spin(0.1);
@@ -324,6 +309,7 @@ void Geometry::update(const int isRotate, const int isCenter, const int isUpdown
     if (isCenter == 1){
         around(0.1);
     }
+     */
 }
 
 void Geometry::spin(float deg)
@@ -334,9 +320,11 @@ void Geometry::spin(float deg)
 void Geometry::setMatrix(glm::mat4 modelView)
 {
     modelG = modelView;
-    modelG = glm::translate(glm::mat4(1), position) * modelG;
-    modelG = glm::scale(glm::mat4(1), size) * modelG;
+    /*
+    modelG = modelG * glm::scale(glm::mat4(1), size);
+    modelG = modelG * glm::translate(glm::mat4(1), position);
     //modelG = glm::rotate(glm::mat4(1), deg, glm::vec3(1,0,0)) * modelG;
+     */
 }
 
 void Geometry::around(float deg)
@@ -356,3 +344,16 @@ void Geometry::around(float deg)
      */
      
 }
+
+void Geometry::updown(glm::vec3 move)
+{
+    if (counter == 2000) {
+        isUp = 0;
+    }
+    else if (counter == 0)
+    {
+        isUp = 1;
+    }
+    modelG = glm::translate(move) * modelG;
+}
+

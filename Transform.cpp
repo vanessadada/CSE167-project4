@@ -38,9 +38,12 @@ void Transform::draw(const glm::mat4 &matrixC)
 void Transform::update(const int isRotate, const int isCenter, const int isUpdown)
 {
     //glm::mat4 new_M = matrixC * matrixM;
-    
+
     if(isRotate == 1){
-        spin(0.1);
+        for (auto& node : this->childsNode)
+        {
+            node -> spin(0.1);
+        }
     }
     
     if(isCenter == 1){
@@ -57,11 +60,6 @@ void Transform::update(const int isRotate, const int isCenter, const int isUpdow
             counter = counter - 1;
         }
     }
-    /*
-    for (auto& node : childsNode)
-    {
-        node->update(isRotate, isCenter);
-    }*/
 }
 
 void Transform::updown(glm::vec3 move)
@@ -73,7 +71,7 @@ void Transform::updown(glm::vec3 move)
     {
         isUp = 1;
     }
-    matrixM = matrixM * glm::translate(move);
+    matrixM = glm::translate(move) * matrixM;
 }
 
 void Transform::spin(float deg)

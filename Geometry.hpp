@@ -58,8 +58,10 @@ public:
     void renderModel(glm::mat4& view, glm::mat4& projection, GLuint shader);
     void draw(const glm::mat4 &matrixC);
     void update(const int isRotate, const int isCenter, const int isUpdown);
-    void spin(float deg);
+    void spin(const float deg);
     void around(float deg);
+    void updown(glm::vec3 move);
+    int isUp, counter;
 };
 
 #endif /* Geometry_hpp */

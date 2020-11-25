@@ -26,7 +26,7 @@ public:
     void draw(const glm::mat4& matrixC);
     void update(const int isRotate, const int isCenter, const int isUpdown);
     void updown(glm::vec3 move);
-    void spin(float deg);
+    void spin(const float deg);
     void around(float deg);
     int isUp = 1;
     int counter = 0;

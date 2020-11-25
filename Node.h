@@ -19,6 +19,7 @@ public:
     
     virtual void draw(const glm::mat4& matrixC)=0;
     virtual void update(const int isRotate, const int isCenter, const int isUpdown)=0;
+    virtual void spin(const float deg) = 0;
 };
 
 #endif /* Node_hpp */
