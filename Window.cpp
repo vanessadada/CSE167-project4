@@ -158,7 +158,7 @@ bool Window::initializeObjects()
 {
     //color position size isCylinder degree
     lobbyRoot = new Transform(glm::mat4(1));
-    lobby = new Geometry("shaders/amongus_lobby.obj", glm::vec3(0.7529,0.7529,0.7529), glm::vec3(0), glm::vec3(1), 1, 0);
+    lobby = new Geometry("amongus_lobby.obj", glm::vec3(0.7529,0.7529,0.7529), glm::vec3(0), glm::vec3(1), 1, 0);
     lobbyRoot->matrixM = lobbyRoot->matrixM * glm::scale(glm::mat4(1), glm::vec3(1.35));
     lobbyRoot->matrixM = lobbyRoot->matrixM * glm::rotate(glm::mat4(1), glm::radians(90.0f), glm::vec3(1,0,0));
 //    lobbyRoot->matrixM = lobbyRoot->matrixM * glm::translate(glm::mat4(1),glm::vec3(0,-12,-10));
@@ -169,7 +169,7 @@ bool Window::initializeObjects()
     
     //black
     astroStandChild = new Transform(glm::mat4(1));
-    astroStand = new Geometry("shaders/amongus_astro_still.obj", glm::vec3(0.2431,0.2784,0.3058), glm::vec3(-5,0,3), glm::vec3(0.15), 1, 0);
+    astroStand = new Geometry("amongus_astro_still.obj", glm::vec3(0.2431,0.2784,0.3058), glm::vec3(-5,0,3), glm::vec3(0.15), 1, 0);
     astroStandChild->matrixM = astroStandChild->matrixM * glm::scale(glm::mat4(1), glm::vec3(0.05));
     astroStandChild->matrixM = astroStandChild->matrixM * glm::translate(glm::mat4(1), glm::vec3(20,-35,15));
 //    astroStandChild->matrixM = astroStandChild->matrixM * glm::rotate(glm::mat4(1), glm::radians(90.0f), glm::vec3(1,0,0));
@@ -181,7 +181,7 @@ bool Window::initializeObjects()
     
     //blue
     astroStand1Child = new Transform(glm::mat4(1));
-    astroStand1 = new Geometry("shaders/amongus_astro_still.obj", glm::vec3(0.075,0.18,0.82), glm::vec3(5,0,3), glm::vec3(0.05), 1, 0);
+    astroStand1 = new Geometry("amongus_astro_still.obj", glm::vec3(0.075,0.18,0.82), glm::vec3(5,0,3), glm::vec3(0.05), 1, 0);
     float r1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
     astroStand1Child->matrixM = astroStand1Child->matrixM * glm::scale(glm::mat4(1), glm::vec3(0.05));
     astroStand1Child->matrixM = astroStand1Child->matrixM * glm::translate(glm::mat4(1), (glm::vec3(110 * r1,-35,100)));
@@ -195,7 +195,7 @@ bool Window::initializeObjects()
     
     //brown
     astroStand2Child = new Transform(glm::mat4(1));
-    astroStand2 = new Geometry("shaders/amongus_astro_still.obj", glm::vec3(0.443,0.286,0.114), glm::vec3(3,0,3), glm::vec3(0.05), 1, 0);
+    astroStand2 = new Geometry("amongus_astro_still.obj", glm::vec3(0.443,0.286,0.114), glm::vec3(3,0,3), glm::vec3(0.05), 1, 0);
     float r2 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
     astroStand2Child->matrixM = astroStand2Child->matrixM * glm::scale(glm::mat4(1), glm::vec3(0.05));
     astroStand2Child->matrixM = astroStand2Child->matrixM * glm::translate(glm::mat4(1), glm::vec3(-80 * r2,-35,60));
@@ -209,7 +209,7 @@ bool Window::initializeObjects()
     
     //cyan
     astroStand3Child = new Transform(glm::mat4(1));
-    astroStand3 = new Geometry("shaders/amongus_astro_still.obj", glm::vec3(0.224,0.996,0.867), glm::vec3(1,0,3), glm::vec3(0.05), 1, 0);
+    astroStand3 = new Geometry("amongus_astro_still.obj", glm::vec3(0.224,0.996,0.867), glm::vec3(1,0,3), glm::vec3(0.05), 1, 0);
     float r3 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
     astroStand3Child->matrixM = astroStand3Child->matrixM * glm::scale(glm::mat4(1), glm::vec3(0.05));
     astroStand3Child->matrixM = astroStand3Child->matrixM * glm::translate(glm::mat4(1), glm::vec3(100*r3,-35,100));
@@ -223,7 +223,7 @@ bool Window::initializeObjects()
     
     //dark green
     astroStand4Child = new Transform(glm::mat4(1));
-    astroStand4 = new Geometry("shaders/amongus_astro_still.obj", glm::vec3(0.075,0.502,0.173), glm::vec3(7,0,1), glm::vec3(0.05), 1, 0);
+    astroStand4 = new Geometry("amongus_astro_still.obj", glm::vec3(0.075,0.502,0.173), glm::vec3(7,0,1), glm::vec3(0.05), 1, 0);
     float r4 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
     astroStand4Child->matrixM = astroStand4Child->matrixM * glm::scale(glm::mat4(1), glm::vec3(0.05));
     astroStand4Child->matrixM = astroStand4Child->matrixM * glm::translate(glm::mat4(1), glm::vec3(-70*r4,-35,10));
@@ -368,12 +368,12 @@ bool Window::initializeObjects()
 //    astroStand3->isRender = 0;
 //    astroStand4->isRender = 0;
     
-    astroMove1 = new Geometry("shaders/amongus_astro_moving1.obj", glm::vec3(1,0,0), glm::vec3(0), glm::vec3(1), 1, 0);
+    astroMove1 = new Geometry("amongus_astro_moving1.obj", glm::vec3(1,0,0), glm::vec3(0), glm::vec3(1), 1, 0);
     astroMove1->setView(view);
     astroMove1->setShader(modelShader);
     astroMove1->setProjection(projection);
     
-    astroMove2 = new Geometry("shaders/amongus_astro_moving2.obj", glm::vec3(1,0,0), glm::vec3(0), glm::vec3(1), 1, 0);
+    astroMove2 = new Geometry("amongus_astro_moving2.obj", glm::vec3(1,0,0), glm::vec3(0), glm::vec3(1), 1, 0);
     astroMove2->setView(view);
     astroMove2->setShader(modelShader);
     astroMove2->setProjection(projection);
