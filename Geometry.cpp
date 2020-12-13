@@ -16,6 +16,9 @@ Geometry::Geometry(std::string filename, glm::vec3 color, glm::vec3 positionP, g
     position = positionP;
     size = sizeP;
     deg = degP;
+    modelG = glm::mat4(1);
+//    modelG = glm::scale(glm::mat4(1), sizeP) * modelG;
+//    modelG = glm::translate(glm::mat4(1), positionP) * modelG;
 }
 
 Geometry::~Geometry()
@@ -26,7 +29,6 @@ Geometry::~Geometry()
 void Geometry::init(std::string filename)
 {
     modelG = glm::mat4(1);
-    modelG = glm::scale(modelG, glm::vec3(0.5));
     
     std::ifstream objFile(filename); // The obj file we are reading.
     
@@ -164,7 +166,6 @@ void Geometry::init(std::string filename)
         }
     }
     
-    
     std::vector<float> xarray;
     std::vector<float> yarray;
     std::vector<float> zarray;
@@ -189,13 +190,31 @@ void Geometry::init(std::string filename)
     float ycenter = (ymax+ymin)/2;
     float zcenter = (zmax+zmin)/2;
     
+//    center = glm::vec3(xcenter, ycenter, zcenter);
+//
+//    float one = abs(xmin - xcenter);
+//    float two = abs(xmax - xcenter);
+//    float three = abs(ymin - ycenter);
+//    float four = abs(ymax - ycenter);
+//    float five = abs(zmin - zcenter);
+//    float six = abs(zmax - zcenter);
+//
+//    float maxi;
+//    maxi = max(one, two);
+//    maxi = max(maxi, three);
+//    maxi = max(maxi, four);
+//    maxi = max(maxi, five);
+//    maxi = max(maxi, six);
+//
+//    radius = maxi;
+    
     for(auto& p : points)
     {
         p.x = p.x - xcenter;
         p.y = p.y - ycenter;
         p.z = p.z - zcenter;
     }
-
+    
     std::vector<float> xarrayC;
     std::vector<float> yarrayC;
     std::vector<float> zarrayC;
@@ -221,7 +240,7 @@ void Geometry::init(std::string filename)
         p.y = p.y*factor;
         p.z = p.z*factor;
     }
-    
+
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &nVBO);
     glGenBuffers(1, &VBO);
@@ -251,9 +270,10 @@ void Geometry::init(std::string filename)
 
 void Geometry::draw(const glm::mat4 &matrixC)
 {
-    //modelMatrix = matrixC;
     setMatrix(matrixC);
-    renderModel(viewMatirx, modelProjection, shaderProgram);
+    if(isRender == 1){
+        renderModel(viewMatirx, modelProjection, shaderProgram);
+    }
 }
 
 void Geometry::renderModel(glm::mat4 &view, glm::mat4 &projection, GLuint shader)
@@ -278,7 +298,6 @@ void Geometry::renderModel(glm::mat4 &view, glm::mat4 &projection, GLuint shader
     glUniform3fv(glGetUniformLocation(shader, "material.specular"), 1, glm::value_ptr(specular));
         
     glUniform1f(glGetUniformLocation(shader, "material.shininess"), shininess);
-        
     
     glBindVertexArray(VAO);
     
@@ -289,27 +308,14 @@ void Geometry::renderModel(glm::mat4 &view, glm::mat4 &projection, GLuint shader
     glUseProgram(0);
 }
 
-void Geometry::update(const int isRotate, const int isCenter, const int isUpdown)
+void Geometry::update(const float time)
 {
-    if(isUp == 1){
-        updown(glm::vec3(0,0.001,0));
-        counter = counter + 1;
-    }
-    else{
-        updown(glm::vec3(0,-0.001,0));
-        counter = counter - 1;
-    }
-    
-    /*
-    //setMatrix(matrixC);
-    if (isRotate == 1){
-        spin(0.1);
-    }
-    
-    if (isCenter == 1){
-        around(0.1);
-    }
-     */
+    move(time);
+}
+
+void Geometry::move(float time)
+{
+    modelG = modelG * glm::translate(glm::mat4(1), glm::vec3(0,0,3));
 }
 
 void Geometry::spin(float deg)
@@ -320,29 +326,6 @@ void Geometry::spin(float deg)
 void Geometry::setMatrix(glm::mat4 modelView)
 {
     modelG = modelView;
-    /*
-    modelG = modelG * glm::scale(glm::mat4(1), size);
-    modelG = modelG * glm::translate(glm::mat4(1), position);
-    //modelG = glm::rotate(glm::mat4(1), deg, glm::vec3(1,0,0)) * modelG;
-     */
-}
-
-void Geometry::around(float deg)
-{
-    //glm::vec3 pointT = glm::vec3(3.322739,59.872997,4.617175);
-    //glm::vec3 pointC = glm::vec3(-0.000000,0.000000,-0.750000);
-    glm::vec3 origin = glm::vec3(15,0,0);
-    //glm::vec3 axis = glm::cross(pointT, pointC);
-    glm::mat4 translate = glm::translate(glm::mat4(1), origin);
-    modelG = translate * glm::rotate(glm::mat4(1), glm::radians(deg), glm::vec3(0,1,0)) * inverse(translate) * modelG;
-
-    
-    /*
-    matrixM = matrixM * glm::rotate(glm::radians(deg), glm::vec3(0.0f, 1.0f, 0.0f));
-    matrixM = matrixM * glm::translate(glm::vec3(0.05,0,0));
-    matrixM = matrixM * glm::rotate(glm::radians(deg), glm::vec3(0,1,0));
-     */
-     
 }
 
 void Geometry::updown(glm::vec3 move)

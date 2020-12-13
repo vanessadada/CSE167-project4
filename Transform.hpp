@@ -24,12 +24,13 @@ public:
     
     void addChild(Node* child);
     void draw(const glm::mat4& matrixC);
-    void update(const int isRotate, const int isCenter, const int isUpdown);
+    void update(const float time);
     void updown(glm::vec3 move);
     void spin(const float deg);
-    void around(float deg);
+    void move(float time);
     int isUp = 1;
     int counter = 0;
+    void scale(double x);
     
 };
 

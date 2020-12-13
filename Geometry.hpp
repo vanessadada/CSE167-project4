@@ -14,6 +14,8 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <algorithm>
+#include <cstdlib>
 
 using namespace std;
 
@@ -30,7 +32,10 @@ public:
     float deg;
     
     glm::mat4 modelG;
-    glm::mat4 modelMatrix;
+    glm::vec3 center;
+    float radius;
+    int isRender = 1;
+    
     glm::vec3 modelColor;
     glm::vec3 modelPosition;
     int isCylinder;
@@ -45,8 +50,8 @@ public:
     glm::mat4 modelProjection;
     glm::mat4 viewMatirx;
     glm::vec3 cameraPos = glm::vec3(0,0,20);
-    glm::vec3 lightPos = glm::vec3(4,-4,-4);
-    glm::vec3 lightColor = glm::vec3(1,1,1);
+    glm::vec3 lightPos = glm::vec3(4,4,10);
+    glm::vec3 lightColor = glm::vec3(0.2,0.2,0.2);
     
     void setMatrix(glm::mat4 modelView);
     
@@ -57,11 +62,13 @@ public:
     void init(std::string filename);
     void renderModel(glm::mat4& view, glm::mat4& projection, GLuint shader);
     void draw(const glm::mat4 &matrixC);
-    void update(const int isRotate, const int isCenter, const int isUpdown);
+    void update(const float time);
     void spin(const float deg);
     void around(float deg);
     void updown(glm::vec3 move);
     int isUp, counter;
+    
+    void move(float time);
 };
 
 #endif /* Geometry_hpp */

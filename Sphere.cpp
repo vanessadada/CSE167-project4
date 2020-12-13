@@ -12,8 +12,8 @@
 
 Sphere::Sphere() {
     model = glm::mat4(1);
-    model = glm::scale(model, glm::vec3(3));
-    model = glm::translate(glm::mat4(1), glm::vec3(-12,4,-4))*model;
+    model = glm::scale(model, glm::vec3(0.5));
+    model = glm::translate(glm::mat4(1), glm::vec3(-5.5,-1.5,5))*model;
     
     int i, j;
     std::vector<GLfloat> vertices;
